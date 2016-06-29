@@ -3,6 +3,7 @@ package br.com.leonardobenedeti.carrinhoorama;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -42,6 +43,7 @@ import java.util.Map;
 
 import adapter.MyListAdapter;
 import controllers.AppController;
+import controllers.DAOController;
 import model.CartItem;
 
 public class MainActivity extends AppCompatActivity {
@@ -97,8 +99,10 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         BadgeView badge = new BadgeView(this, fab);
-//        badge.setText("1");
-//        badge.show();
+        DAOController daoController = new DAOController(getBaseContext());
+        int itens = daoController.getCount();
+        badge.setText(itens+"");
+        badge.show();
 
         if (fab != null) {
             fab.setOnClickListener(new View.OnClickListener() {

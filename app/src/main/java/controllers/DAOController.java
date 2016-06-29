@@ -16,8 +16,6 @@ public class DAOController {
     private SQLiteDatabase db;
     private CartDAO banco;
 
-
-
     public DAOController(Context context){
         banco = new CartDAO(context);
     }
@@ -61,6 +59,22 @@ public class DAOController {
         return cursor;
     }
 
+    public int getCount(){
+        Cursor cursor;
+        db = banco.getReadableDatabase();
+
+        cursor = db.rawQuery("select count(*)"+
+                        " from "+ CartDAO.DICTIONARY_TABLE_NAME+
+                        ";"
+                , null);
+
+        if(cursor!=null){
+            cursor.moveToLast();
+        }
+        db.close();
+        return cursor.getCount();
+    }
+
 
     public String getById(int id){
         Cursor cursor2;
@@ -77,6 +91,13 @@ public class DAOController {
         }
         db.close();
         return cursor2.getString(2);
+    }
+
+    public void remove(int id){
+        db = banco.getWritableDatabase();
+        String[] whereArgs = new String[]{String.valueOf(id)};
+        int i = db.delete(CartDAO.DICTIONARY_TABLE_NAME, "_id = ?", whereArgs);
+        db.close();
     }
 
 }
