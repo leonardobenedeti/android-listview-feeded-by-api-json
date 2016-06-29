@@ -7,11 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
 import controllers.AppController;
+import controllers.DAOController;
 import model.CartItem;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -23,14 +25,13 @@ public class DetailsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        CartItem select = (CartItem) getIntent().getSerializableExtra("selecionado");
+        final CartItem select = (CartItem) getIntent().getSerializableExtra("selecionado");
 
         setTitle(select.getProduto());
 
         NetworkImageView imgNetworkImageView = (NetworkImageView) findViewById(R.id.image);
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
         imgNetworkImageView.setImageUrl(select.getPathImg(), imageLoader);
-
 
         TextView descricao = (TextView) findViewById(R.id.descricao);
         descricao.setText(select.getDescricao());
@@ -45,8 +46,13 @@ public class DetailsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                DAOController daoController = new DAOController(getBaseContext());
+
+                String resultado;
+
+                resultado = daoController.insereDado(select);
+
+                Toast.makeText(getApplicationContext(), resultado, Toast.LENGTH_LONG).show();
             }
         });
     }
