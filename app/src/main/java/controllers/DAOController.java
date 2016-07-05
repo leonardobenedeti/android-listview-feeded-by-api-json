@@ -60,19 +60,13 @@ public class DAOController {
     }
 
     public int getCount(){
-        Cursor cursor;
-        db = banco.getReadableDatabase();
+        db = banco.getWritableDatabase();
 
-        cursor = db.rawQuery("select count(*)"+
-                        " from "+ CartDAO.DICTIONARY_TABLE_NAME+
-                        ";"
-                , null);
-
-        if(cursor!=null){
-            cursor.moveToLast();
-        }
+        String sql = "SELECT * FROM "+CartDAO.DICTIONARY_TABLE_NAME;
+        int recordCount = db.rawQuery(sql, null).getCount();
         db.close();
-        return cursor.getCount();
+
+        return recordCount;
     }
 
 
@@ -92,12 +86,16 @@ public class DAOController {
         db.close();
         return cursor2.getString(2);
     }
+    
+    public boolean remove(int id) {
+        boolean deleteSuccessful = false;
 
-    public void remove(int id){
         db = banco.getWritableDatabase();
-        String[] whereArgs = new String[]{String.valueOf(id)};
-        int i = db.delete(CartDAO.DICTIONARY_TABLE_NAME, "_id = ?", whereArgs);
+        deleteSuccessful = db.delete(CartDAO.DICTIONARY_TABLE_NAME, "_id ='" + id + "'", null) > 0;
         db.close();
+
+        return deleteSuccessful;
+
     }
 
 }

@@ -48,28 +48,31 @@ import model.CartItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView errorMessage;
-    ProgressBar progress;
-    LinearLayout content;
-    private TextView titleList;
+//    TextView errorMessage;
+//    ProgressBar progress;
+//    LinearLayout content;
+//    private TextView titleList;
 
     private ArrayList<CartItem> cartItems;
 
 
     MyListAdapter adapter;
-
-    private Map<String, String> params;
-    private RequestQueue rq;
-    private String resposta;
-    private Activity activity;
-    private ProgressDialog pd;
-    String url;
-
-    String metodo;
-    String parametro;
+//
+//    private Map<String, String> params;
+//    private RequestQueue rq;
+//    private String resposta;
+//    private Activity activity;
+//    private ProgressDialog pd;
+//    String url;
+//
+//    String metodo;
+//    String parametro;
 
     private ListView listView;
 
+    FloatingActionButton fab;
+    BadgeView badge;
+    DAOController daoController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,23 +99,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        BadgeView badge = new BadgeView(this, fab);
-        DAOController daoController = new DAOController(getBaseContext());
-        int itens = daoController.getCount();
-        badge.setText(itens+"");
-        badge.show();
+        badge = new BadgeView(this, fab);
+        daoController = new DAOController(getBaseContext());
 
-        if (fab != null) {
-            fab.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent i = new Intent(MainActivity.this, CartActivity.class);
-                    startActivity(i);
-                }
-            });
-        }
     }
 
     @Override
@@ -148,6 +139,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
+
+        int itens = daoController.getCount();
+        badge.setText(itens+"");
+        badge.show();
+
+        if (fab != null) {
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(MainActivity.this, CartActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
+
     }
 
     public void degenerateJson(String data){
