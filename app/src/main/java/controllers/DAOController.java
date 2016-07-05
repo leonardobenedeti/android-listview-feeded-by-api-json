@@ -86,7 +86,7 @@ public class DAOController {
         db.close();
         return cursor2.getString(2);
     }
-    
+
     public boolean remove(int id) {
         boolean deleteSuccessful = false;
 

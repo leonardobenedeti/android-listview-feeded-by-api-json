@@ -24,7 +24,7 @@ public class CartActivity extends AppCompatActivity {
 
     private ListView lista;
     public static final String TITLE = "Remover produto";
-    int itemID = 0;
+    int itemID = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

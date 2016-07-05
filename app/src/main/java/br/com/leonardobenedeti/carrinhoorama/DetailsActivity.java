@@ -1,5 +1,6 @@
 package br.com.leonardobenedeti.carrinhoorama;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,12 +12,16 @@ import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.readystatesoftware.viewbadger.BadgeView;
 
 import controllers.AppController;
 import controllers.DAOController;
 import model.CartItem;
 
 public class DetailsActivity extends AppCompatActivity {
+
+    BadgeView badge;
+    DAOController daoController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +47,13 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton add = (FloatingActionButton) findViewById(R.id.add);
+        FloatingActionButton cart = (FloatingActionButton) findViewById(R.id.cart);
+
+        badge = new BadgeView(this, cart);
+        daoController = new DAOController(getBaseContext());
+
+        add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DAOController daoController = new DAOController(getBaseContext());
@@ -53,8 +63,30 @@ public class DetailsActivity extends AppCompatActivity {
                 resultado = daoController.insereDado(select);
 
                 Toast.makeText(getApplicationContext(), resultado, Toast.LENGTH_LONG).show();
+
+                int itens = daoController.getCount();
+                badge.setText(itens+"");
+                badge.show();
             }
         });
+
+        if (cart != null) {
+            cart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(DetailsActivity.this, CartActivity.class);
+                    startActivity(i);
+                }
+            });
+        }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        int itens = daoController.getCount();
+        badge.setText(itens+"");
+        badge.show();
+    }
 }
